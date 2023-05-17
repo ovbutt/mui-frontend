@@ -9,9 +9,10 @@ type InputProps = {
   placeholder?: string
   value: string
   style?: {}
+  type?: string
 }
 
-const CustomInput = ({ id, label, variant, onChange, placeholder, name, value, style }: InputProps) => {
+const CustomInput = ({ id, label, variant, onChange, placeholder, name, value, style, type }: InputProps) => {
   return (
     <TextField
       name={name}
@@ -22,6 +23,7 @@ const CustomInput = ({ id, label, variant, onChange, placeholder, name, value, s
       placeholder={placeholder}
       value={value}
       style={style}
+      type={type}
     />
   )
 }

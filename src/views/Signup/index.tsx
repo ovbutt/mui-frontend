@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { CustomButton, CustomInput } from '../../components'
 import { useNavigate } from 'react-router-dom'
+import { userSignup } from '../../services/authServices'
 
 type Props = {}
 
@@ -13,8 +14,25 @@ const Signup = (props: Props) => {
 
   const navigate = useNavigate()
 
-  const signup = () => {
-    alert('Signup')
+  const signup = async () => {
+    try {
+      const payload = {
+        firstName,
+        lastName,
+        username,
+        password,
+      }
+      const userData = await userSignup(payload)
+      console.log(' userData: ', userData)
+      if (userData !== null) {
+        localStorage.setItem('user', JSON.stringify(userData))
+        navigate('/')
+      } else {
+        alert('User Signup failed')
+      }
+    } catch (error) {
+      alert('User Singup error: ' + error)
+    }
   }
   return (
     <Box
@@ -61,6 +79,7 @@ const Signup = (props: Props) => {
         onChange={(e: { target: { value: React.SetStateAction<string> } }) => setPassword(e.target.value)}
         value={password}
         style={{ margin: 10, width: '30%' }}
+        type="password"
       />
 
       <Box

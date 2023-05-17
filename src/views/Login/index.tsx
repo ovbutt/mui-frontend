@@ -2,18 +2,33 @@ import { Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { CustomButton, CustomInput } from '../../components'
 import { useNavigate } from 'react-router-dom'
+import { userLogin } from '../../services/authServices'
 
 type Props = {}
 
 const Login = (props: Props) => {
   const [username, setUserName] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-
-  const login = () => {
-    alert('login ' + username + password)
-  }
-
   const navigate = useNavigate()
+
+  const login = async () => {
+    try {
+      const payload = {
+        username,
+        password,
+      }
+      const userData = await userLogin(payload)
+      console.log(' userData: ', userData)
+      if (userData !== null) {
+        localStorage.setItem('user', JSON.stringify(userData))
+        navigate('/')
+      } else {
+        alert('User not found')
+      }
+    } catch (error) {
+      alert('User Login error: ' + error)
+    }
+  }
 
   return (
     <Box
@@ -44,6 +59,7 @@ const Login = (props: Props) => {
         onChange={(e: { target: { value: React.SetStateAction<string> } }) => setPassword(e.target.value)}
         value={password}
         style={{ margin: 10, width: '30%' }}
+        type="password"
       />
 
       <Box
